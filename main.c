@@ -11,6 +11,12 @@ typedef struct {
     int number;
 } ThreadData;
 
+typedef struct {
+    char r;
+    char g;
+    char b;
+} Pixel;
+
 void* run(void* arg);
 void spawnThreads(ThreadData* data, pthread_t* thread);
 int mergeThreads(ThreadData* data, pthread_t* thread);
@@ -28,11 +34,6 @@ int digitsCount(int num) {
 
 int main(int argc, char *argv[])
 {
-    ThreadData data = {0};
-    pthread_t thread[THREAD_COUNT];
-    spawnThreads(&data, thread);
-    mergeThreads(&data, thread);
-
     int sizeOfHeader =
         3 +                             // P6
         digitsCount(IMAGE_HEIGHT) + 1 + // no \n here! resolution
@@ -42,10 +43,6 @@ int main(int argc, char *argv[])
     int sizeOfBuffer = sizeOfHeader + IMAGE_WIDTH * IMAGE_HEIGHT * 3 + 1; // data
 
     char* buffer = (char*)malloc(sizeOfBuffer);
-    for (int i = 0; i < sizeOfBuffer; i++) {
-        buffer[i] = '_';
-    }
-
 
     int widhtChars = digitsCount(IMAGE_WIDTH);
     int heightChars = digitsCount(IMAGE_HEIGHT);
@@ -75,7 +72,7 @@ int main(int argc, char *argv[])
             int index = 3 * (i * IMAGE_HEIGHT + j) + sizeOfHeader;
             buffer[index++] = 255; // R
             buffer[index++] = 128; // G
-            buffer[index++] = 64; // B
+            buffer[index++] = 64;  // B
         }   
     }
 
