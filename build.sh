@@ -1,1 +1,1 @@
-gcc -o program main.c -lm
+gcc $1 -o program main.c -lm
